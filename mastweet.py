@@ -38,7 +38,10 @@ else:
 # Remove HTML tags from toot
 soup = BeautifulSoup(latest_toot_content, 'html.parser')
 latest_toot_text = soup.get_text()
-
+if latest_toot_text.find('#sync'):
+    print('continue')
+else:
+    print('stop')
 
 
 # Create payload
@@ -46,7 +49,7 @@ payload = {
         "text": latest_toot_text
 }
 
-
+exit()
 # Post tweet
 response = requests.request(
     "POST",
