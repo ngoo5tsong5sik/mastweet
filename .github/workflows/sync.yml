@@ -45,9 +45,7 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN  }}
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY  }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET  }}
-
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN  }}
 
       - name: Delete old Github Actions cache entries
         run: chmod +x cache-cleanup.sh && ./cache-cleanup.sh
