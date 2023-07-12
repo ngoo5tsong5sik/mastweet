@@ -48,7 +48,7 @@ jobs:
           BEARER_TOKEN: ${{ secrets.BEARER_TOKEN  }}
 
       - name: Delete old Github Actions cache entries
-        run: ./cache-cleanup.sh
+        run: chmod +x cache-cleanup.sh && ./cache-cleanup.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
