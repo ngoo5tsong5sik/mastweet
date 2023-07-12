@@ -1,10 +1,10 @@
 on:
-  push
-  #schedule:
+  #push
+  schedule:
     # Trigger the sync every 10 minutes.
-    # - cron: '*/10 * * * *'
+     - cron: '*/10 * * * *'
   # Allow triggering the sync manually.
-  #workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   sync:

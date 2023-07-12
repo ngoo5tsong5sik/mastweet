@@ -32,37 +32,32 @@ if latest_toot_id not in synced_toots:
     synced_toots.append(latest_toot_id)
     with open(pickle_name, 'wb') as f:
         pickle.dump(synced_toots, f)
+
+    # Remove HTML tags from toot
+    soup = BeautifulSoup(latest_toot_content, 'html.parser')
+    latest_toot_text = soup.get_text()
+
+    # Create payload
+    payload = {
+            "text": latest_toot_text
+    }
+
+    # Post tweet
+    response = requests.request(
+        "POST",
+        "https://api.twitter.com/2/tweets",
+        json=payload,
+        headers={
+            "Authorization": "Bearer {}".format(os.environ.get("BEARER_TOKEN")),
+            "Content-Type": "application/json",
+        },
+    )
+
+    # Check response
+    if response.status_code != 201:
+        raise Exception(f"Request returned error: {response.status_code}, {response.text}")
+    else:
+        print("Successfully tweeted!")
 else:
     print('Toot already synced')
 
-# Remove HTML tags from toot
-soup = BeautifulSoup(latest_toot_content, 'html.parser')
-latest_toot_text = soup.get_text()
-if latest_toot_text.find('#sync'):
-    print('continue')
-else:
-    print('stop')
-
-
-# Create payload
-payload = {
-        "text": latest_toot_text
-}
-
-exit()
-# Post tweet
-response = requests.request(
-    "POST",
-    "https://api.twitter.com/2/tweets",
-    json=payload,
-    headers={
-        "Authorization": "Bearer {}".format(os.environ.get("BEARER_TOKEN")),
-        "Content-Type": "application/json",
-    },
-)
-
-# Check response
-if response.status_code != 201:
-    raise Exception(f"Request returned error: {response.status_code}, {response.text}")
-else:
-    print("Successfully tweeted!")
