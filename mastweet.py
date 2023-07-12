@@ -41,6 +41,20 @@ if latest_toot_id not in synced_toots:
     payload = {
             "text": latest_toot_text
     }
+    # Get new token
+
+    get_token = requests.request(
+        "POST",
+        "https://api.twitter.com/2/oauth2/token",
+        headers={
+            'Content-Type':'application/x-www-form-urlencoded'
+        },
+        data={
+            'refresh_token':os.environ.get('TWITTER_REFRESH_TOKEN'),
+            'grant_type':'refresh_token',
+            'client_id':os.environ.get('TWITTER_CLIENT_ID')
+        }
+    )
 
     # Post tweet
     response = requests.request(
@@ -48,7 +62,7 @@ if latest_toot_id not in synced_toots:
         "https://api.twitter.com/2/tweets",
         json=payload,
         headers={
-            "Authorization": "Bearer {}".format(os.environ.get("BEARER_TOKEN")),
+            "Authorization": "Bearer {}".format(get_token),
             "Content-Type": "application/json",
         },
     )
