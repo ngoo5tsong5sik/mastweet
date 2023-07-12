@@ -33,13 +33,18 @@ jobs:
       - name: Check if cache files are there
         run: mkdir -p cache && ls -la cache
 
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Run the script
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
-      - run: pip install -r requirements.txt
-      - run: python mastweet.py
+        run: pip install -r requirements.txt
+        run: python mastweet.py
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN  }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN  }}
 
       - name: Delete old Github Actions cache entries
         run: cd config && ./cache-cleanup.sh
