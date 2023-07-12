@@ -1,0 +1,48 @@
+on:
+  push
+  #schedule:
+    # Trigger the sync every 10 minutes.
+    # - cron: '*/10 * * * *'
+  # Allow triggering the sync manually.
+  #workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    environment: Cron
+    steps:
+      - name: Check out the repo itself
+        uses: actions/checkout@v3
+        with:
+          path: config
+
+      - name: Restore sync cache folder
+        uses: actions/cache@v3
+        with:
+          path: cache
+          # We don't really need a cache key as we never want to throw the cache
+          # away. We need a unique number per run so that the cache always gets
+          # saved. Then the next run will fall back to the restore-key and
+          # retrieve the newest cache entry. At the end of the workflow we
+          # clean up older cache entries over the Github API to free up space.
+          # This is a hacky way to use the Github cache as persistent file
+          # system :-)
+          key: cache-${{ github.run_number }}
+          restore-keys: cache
+
+      - name: Check if cache files are there
+        run: mkdir -p cache && ls -la cache
+
+      steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+      - run: python mastweet.py
+
+      - name: Delete old Github Actions cache entries
+        run: cd config && ./cache-cleanup.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
