@@ -3,6 +3,7 @@ from mastodon import Mastodon
 from bs4 import BeautifulSoup
 import requests
 import pickle
+import os
 
 # Mastodon API setup
 mastodon = Mastodon(
