@@ -1,8 +1,8 @@
 on:
   #push
-  #schedule:
+  schedule:
     # Trigger the sync every 10 minutes.
-    # - cron: '*/10 * * * *'
+    - cron: '*/10 * * * *'
   # Allow triggering the sync manually.
   workflow_dispatch:
 
@@ -42,11 +42,16 @@ jobs:
           pip install -r requirements.txt
           cd cache && python ../mastweet.py
         env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN  }}
-          TWITTER_REFRESH_TOKEN: ${{ secrets.TWITTER_REFRESH_TOKEN }}
-          TWITTER_CLIENT_ID: ${{ secrets.TWITTER_CLIENT_ID }}
+          MASTODON_CLIENT_ID: ${{ secrets.MASTODON_CLIENT_ID }}
+          MASTODON_CLIENT_SECRET: ${{ secrets.MASTODON_CLIENT_SECRET }}
+          MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN  }}
+          MASTODON_INSTANCE_URL: ${{ secrets.MASTODON_INSTANCE_URL  }}
+          TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          
+
 
       - name: Delete old Github Actions cache entries
         run: chmod +x cache-cleanup.sh && ./cache-cleanup.sh
