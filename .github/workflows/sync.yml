@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Check out the repo itself
         uses: actions/checkout@v3
-        with:
-          path: config
 
       - name: Restore sync cache folder
         uses: actions/cache@v3
@@ -42,7 +40,7 @@ jobs:
       - name: Run the script
         run: |
           pip install -r requirements.txt
-          python mastweet.py
+          cd cache && python ../mastweet.py
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
@@ -50,7 +48,7 @@ jobs:
           BEARER_TOKEN: ${{ secrets.BEARER_TOKEN  }}
 
       - name: Delete old Github Actions cache entries
-        run: cd config && ./cache-cleanup.sh
+        run: ../cache-cleanup.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
