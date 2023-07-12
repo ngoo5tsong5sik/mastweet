@@ -36,9 +36,10 @@ jobs:
         with:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
+        
+      - name: Install requirements
         run: pip install -r requirements.txt
         
-
       - name: Run mastweet.py
         run: cd cache && python ../mastweet.py
         env:
