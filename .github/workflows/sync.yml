@@ -33,13 +33,16 @@ jobs:
       - name: Check if cache files are there
         run: mkdir -p cache && ls -la cache
 
-      - name: Run the script
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
-        run: pip install -r requirements.txt
-        run: python mastweet.py
+
+      - name: Run the script
+        run: |
+          pip install -r requirements.txt
+          python mastweet.py
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
